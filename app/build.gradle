@@ -1,0 +1,86 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
+
+android {
+    compileSdk rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.example.compose.udemy"
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions +="version"
+
+    productFlavors {
+        create("demo") {
+            dimension "version"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-demo"
+            buildConfigField "String", "BASE_URL", '"https://something"'
+        }
+        create("prod") {
+            dimension "version"
+            applicationIdSuffix ".full"
+            versionNameSuffix "-full"
+            buildConfigField "String", "BASE_URL", '"https://something"'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation project(":core")
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    testImplementation("com.google.dagger:hilt-android-testing:$hilt_version")
+    kaptTest("com.google.dagger:hilt-android-compiler:$hilt_version")
+
+    // Network
+    api "com.squareup.okhttp3:okhttp:$okhttp_version"
+    api "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    //retrofit
+    api "com.squareup.retrofit2:retrofit:$retrofit_version"
+    api "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+
+    // Moshi
+    api "com.squareup.moshi:moshi-kotlin:$moshi"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi"
+    api "com.squareup.moshi:moshi-adapters:$moshi"
+}
